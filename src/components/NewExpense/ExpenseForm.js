@@ -2,23 +2,6 @@ import React, { useState } from "react";
 import "./ExpenseForm.css";
 
 const ExpenseForm = (props) => {
-  /*
-  Using multiple states
-
-  const [title, setTitle] = useState("");
-  const [amount, setAmount] = useState("");
-  const [date, setDate] = useState("");
-
-  const titleHandler = (e) => {
-    setTitle(e.target.value);
-  };
-  const amountHandler = (e) => {
-    setAmount(e.target.value);
-  };
-  const dateHandler = (e) => {
-    setDate(e.target.value);
-  };
-*/
   // Alternative -- Using a single state & handler
   const [comboForm, setComboForm] = useState({
     title: "",
@@ -70,6 +53,7 @@ const ExpenseForm = (props) => {
         </div>
         <div className="new-expense__actions">
           <button type="submit">Add expense</button>
+          <button onClick={props.onCancel}>Cancel</button>
         </div>
       </div>
     </form>
