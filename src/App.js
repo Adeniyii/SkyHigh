@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
 import "./App.css";
-import { UserList } from "./components/UI/UserList/UserList";
-import { UserForm } from "./components/UI/UserForm/UserForm";
+import { UserList } from "./components/User/UserList/UserList";
+import { UserForm } from "./components/User/UserForm/UserForm";
 import { ErrorModal } from "./components/UI/ErrorModal/ErrorModal";
 import { Backdrop } from "./components/UI/Backdrop/Backdrop";
 

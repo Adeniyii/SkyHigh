@@ -1,9 +1,10 @@
 import React from "react";
 import { UserCard } from "../UserCard/UserCard";
+import styles from "./UserList.module.css";
 
 export const UserList = ({ users }) => {
   return (
-    <div>
+    <div className={styles.users}>
       <ul>
         {users.length > 0 &&
           users.map((user, index) => {

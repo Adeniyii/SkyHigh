@@ -1,16 +1,9 @@
 import React from "react";
+import styles from "./Backdrop.modal.css";
 
 export const Backdrop = (props) => {
   return (
-    <div
-      onClick={props.onExitErrorModal}
-      style={{
-        backgroundColor: "red",
-        opacity: "0.1",
-        height: "100vh",
-        width: "100vw",
-      }}
-    >
+    <div className={styles.backdrop} onClick={props.onExitErrorModal}>
       {props.children}
     </div>
   );
