@@ -1,55 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import CourseGoalList from './components/CourseGoals/CourseGoalList/CourseGoalList';
-import CourseInput from './components/CourseGoals/CourseInput/CourseInput';
-import './App.css';
+import "./App.css";
+import { UserList } from "./components/UI/UserList/UserList";
+import { UserForm } from "./components/UI/UserForm/UserForm";
+import { ErrorModal } from "./components/UI/ErrorModal/ErrorModal";
+import { Backdrop } from "./components/UI/Backdrop/Backdrop";
 
 const App = () => {
-  const [courseGoals, setCourseGoals] = useState([
-    { text: 'Do all exercises!', id: 'g1' },
-    { text: 'Finish the course!', id: 'g2' }
-  ]);
+  const [users, setUsers] = useState([]);
+  const [errorMessage, setErrorMessage] = useState(null);
 
-  const addGoalHandler = enteredText => {
-    setCourseGoals(prevGoals => {
-      const updatedGoals = [...prevGoals];
-      updatedGoals.unshift({ text: enteredText, id: Math.random().toString() });
-      return updatedGoals;
-    });
+  const onUserFormSubmit = (newUser) => {
+    setUsers((prev) => [...prev, newUser]);
   };
 
-  const deleteItemHandler = goalId => {
-    setCourseGoals(prevGoals => {
-      const updatedGoals = prevGoals.filter(goal => goal.id !== goalId);
-      return updatedGoals;
-    });
+  const onInvalidSubmission = (errorMessage) => {
+    setErrorMessage(errorMessage);
   };
 
-  let content = (
-    <p style={{ textAlign: 'center' }}>No goals found. Maybe add one?</p>
-  );
-
-  if (courseGoals.length > 0) {
-    content = (
-      <CourseGoalList items={courseGoals} onDeleteItem={deleteItemHandler} />
-    );
-  }
+  const onExitErrorModal = () => {
+    setErrorMessage(null);
+  };
 
   return (
     <div>
-      <section id="goal-form">
-        <CourseInput onAddGoal={addGoalHandler} />
-      </section>
-      <section id="goals">
-        {content}
-        {/* {courseGoals.length > 0 && (
-          <CourseGoalList
-            items={courseGoals}
-            onDeleteItem={deleteItemHandler}
+      <UserForm
+        onUserFormSubmit={onUserFormSubmit}
+        onInvalidSubmission={onInvalidSubmission}
+      />
+      {!errorMessage && <UserList users={users} />}
+      {errorMessage && (
+        <Backdrop onExitErrorModal={onExitErrorModal}>
+          <ErrorModal
+            message={errorMessage}
+            onExitErrorModal={onExitErrorModal}
           />
-        ) // <p style={{ textAlign: 'center' }}>No goals found. Maybe add one?</p>
-        } */}
-      </section>
+        </Backdrop>
+      )}
     </div>
   );
 };
