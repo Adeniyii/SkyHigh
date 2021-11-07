@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { createPortal } from "react-dom";
 
 import "./App.css";
 import { UserList } from "./components/User/UserList/UserList";
@@ -22,6 +23,24 @@ const App = () => {
     setErrorMessage(null);
   };
 
+  const ErrorPortal = (props) => {
+    return (
+      <>
+        {createPortal(
+          <Backdrop onExitErrorModal={props.onExitErrorModal} />,
+          document.getElementById("backdrop-portal")
+        )}
+        {createPortal(
+          <ErrorModal
+            message={props.errorMessage}
+            onExitErrorModal={props.onExitErrorModal}
+          />,
+          document.getElementById("modal-portal")
+        )}
+      </>
+    );
+  };
+
   return (
     <div>
       <UserForm
@@ -30,12 +49,10 @@ const App = () => {
       />
       {!errorMessage && <UserList users={users} />}
       {errorMessage && (
-        <Backdrop onExitErrorModal={onExitErrorModal}>
-          <ErrorModal
-            message={errorMessage}
-            onExitErrorModal={onExitErrorModal}
-          />
-        </Backdrop>
+        <ErrorPortal
+          onExitErrorModal={onExitErrorModal}
+          errorMessage={errorMessage}
+        />
       )}
     </div>
   );

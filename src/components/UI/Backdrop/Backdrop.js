@@ -1,10 +1,6 @@
 import React from "react";
-import styles from "./Backdrop.modal.css";
+import styles from "./Backdrop.module.css";
 
 export const Backdrop = (props) => {
-  return (
-    <div className={styles.backdrop} onClick={props.onExitErrorModal}>
-      {props.children}
-    </div>
-  );
+  return <div className={styles.backdrop} onClick={props.onExitErrorModal} />;
 };
