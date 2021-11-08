@@ -1,61 +1,43 @@
-import React, { useState } from "react";
-import { createPortal } from "react-dom";
+import React, { useEffect, useState } from "react";
 
-import "./App.css";
-import { UserList } from "./components/User/UserList/UserList";
-import { UserForm } from "./components/User/UserForm/UserForm";
-import { ErrorModal } from "./components/UI/ErrorModal/ErrorModal";
-import { Backdrop } from "./components/UI/Backdrop/Backdrop";
+import Login from "./components/Login/Login";
+import Home from "./components/Home/Home";
+import MainHeader from "./components/MainHeader/MainHeader";
+import AuthContext from "./context/AuthContext";
 
-const App = () => {
-  const [users, setUsers] = useState([]);
-  const [errorMessage, setErrorMessage] = useState(null);
+function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const onUserFormSubmit = (newUser) => {
-    setUsers((prev) => [...prev, newUser]);
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem("loggedIn");
+    if (loggedInUser) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  const loginHandler = (email, password) => {
+    // We should of course check email and password
+    // But it's just a dummy/ demo anyways
+    localStorage.setItem("loggedIn", "1");
+    setIsLoggedIn(true);
   };
 
-  const onInvalidSubmission = (errorMessage) => {
-    setErrorMessage(errorMessage);
-  };
-
-  const onExitErrorModal = () => {
-    setErrorMessage(null);
-  };
-
-  const ErrorPortal = (props) => {
-    return (
-      <>
-        {createPortal(
-          <Backdrop onExitErrorModal={props.onExitErrorModal} />,
-          document.getElementById("backdrop-portal")
-        )}
-        {createPortal(
-          <ErrorModal
-            message={props.errorMessage}
-            onExitErrorModal={props.onExitErrorModal}
-          />,
-          document.getElementById("modal-portal")
-        )}
-      </>
-    );
+  const logoutHandler = () => {
+    localStorage.removeItem("loggedIn");
+    setIsLoggedIn(false);
   };
 
   return (
-    <div>
-      <UserForm
-        onUserFormSubmit={onUserFormSubmit}
-        onInvalidSubmission={onInvalidSubmission}
-      />
-      {!errorMessage && <UserList users={users} />}
-      {errorMessage && (
-        <ErrorPortal
-          onExitErrorModal={onExitErrorModal}
-          errorMessage={errorMessage}
-        />
-      )}
-    </div>
+    <React.Fragment>
+      <AuthContext.Provider value={isLoggedIn}>
+        <MainHeader onLogout={logoutHandler} />
+        <main>
+          {!isLoggedIn && <Login onLogin={loginHandler} />}
+          {isLoggedIn && <Home onLogout={logoutHandler} />}
+        </main>
+      </AuthContext.Provider>
+    </React.Fragment>
   );
-};
+}
 
 export default App;
